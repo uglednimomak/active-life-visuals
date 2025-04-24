@@ -5,14 +5,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus } from 'lucide-react';
+import { Plus, CalendarIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 export const ExerciseForm = () => {
   const { addExercise } = useExercises();
   const [exerciseName, setExerciseName] = useState('');
   const [exerciseCount, setExerciseCount] = useState('');
   const [exerciseCategory, setExerciseCategory] = useState('');
+  const [date, setDate] = useState<Date | undefined>(undefined);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,16 +26,19 @@ export const ExerciseForm = () => {
       return;
     }
 
+    const timestamp = date ? date.toISOString() : new Date().toISOString();
+
     addExercise({
       name: exerciseName,
       count: parseInt(exerciseCount, 10),
-      timestamp: new Date().toISOString(),
+      timestamp: timestamp,
       category: exerciseCategory || undefined,
     });
 
     // Clear form
     setExerciseName('');
     setExerciseCount('');
+    setDate(undefined);
   };
 
   return (
@@ -62,6 +70,34 @@ export const ExerciseForm = () => {
               min="1"
               required
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="exercise-date">Date (Optional)</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  id="exercise-date"
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !date && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           
           <div className="space-y-2">
