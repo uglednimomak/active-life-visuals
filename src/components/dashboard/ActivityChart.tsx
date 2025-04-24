@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useExercises } from '@/context/ExerciseContext';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 import { format, subDays, isWithinInterval, startOfDay } from 'date-fns';
 
 export const ActivityChart = () => {
@@ -61,11 +61,12 @@ export const ActivityChart = () => {
                 axisLine={false}
               />
               <Tooltip 
-                formatter={(value: number, name: string) => [value, name === 'count' ? 'Total Reps' : 'Exercises']}
+                formatter={(value: number, name: string) => [value, name === 'count' ? 'Total Reps' : 'Exercise Count']}
                 labelFormatter={(label: string, data: any) => data[0]?.payload?.fullDate || label}
               />
-              <Bar dataKey="count" name="Total Reps" fill="#4F46E5" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="total" name="Exercises" fill="#10B981" radius={[4, 4, 0, 0]} />
+              <Legend formatter={(value) => value === 'count' ? 'Total Reps' : 'Exercise Count'} />
+              <Bar dataKey="count" name="count" fill="#4F46E5" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="total" name="total" fill="#10B981" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
