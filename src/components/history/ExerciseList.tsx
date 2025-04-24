@@ -24,12 +24,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 export const ExerciseList = () => {
   const { exercises, deleteExercise } = useExercises();
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   
   const filteredExercises = exercises
     .filter(exercise => 
       exercise.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
-      (categoryFilter ? exercise.category === categoryFilter : true)
+      (categoryFilter === 'all' ? true : exercise.category === categoryFilter)
     )
     .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
@@ -54,7 +54,7 @@ export const ExerciseList = () => {
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="cardio">Cardio</SelectItem>
                 <SelectItem value="strength">Strength</SelectItem>
                 <SelectItem value="flexibility">Flexibility</SelectItem>
