@@ -8,6 +8,7 @@ import { ExerciseProvider } from "./context/ExerciseContext";
 import Index from "./pages/Index";
 import ExercisesPage from "./pages/ExercisesPage";
 import HistoryPage from "./pages/HistoryPage";
+import LeaderboardPage from "./pages/LeaderboardPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/exercises" element={<ExercisesPage />} />
             <Route path="/history" element={<HistoryPage />} />
+            <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

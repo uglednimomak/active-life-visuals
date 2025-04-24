@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Activity, BarChart, History, Home } from 'lucide-react';
+import { Activity, BarChart, History, Home, Trophy } from 'lucide-react';
 
 export const Navbar = () => {
   return (
@@ -29,6 +29,12 @@ export const Navbar = () => {
               <Link to="/history" className="flex items-center px-3 py-2 text-sm font-medium transition-colors rounded-md hover:text-fitness-primary">
                 <History className="w-4 h-4 mr-2" />
                 History
+              </Link>
+            </li>
+            <li>
+              <Link to="/leaderboard" className="flex items-center px-3 py-2 text-sm font-medium transition-colors rounded-md hover:text-fitness-primary">
+                <Trophy className="w-4 h-4 mr-2" />
+                Leaderboard
               </Link>
             </li>
           </ul>
