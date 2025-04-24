@@ -4,6 +4,10 @@
 
 **URL**: https://lovable.dev/projects/a0b91377-823a-4f68-8a93-6f9fe32f9f36
 
+## Demo app
+
+**URL** https://active-life-visuals.lovable.app
+
 ## How can I edit this code?
 
 There are several ways of editing your application.
