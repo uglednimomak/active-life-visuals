@@ -1,10 +1,10 @@
-
 export interface Exercise {
   id: string;
   name: string;
   count: number;
   timestamp: string;
   category?: string;
+  personName?: string;
 }
 
 export type ExerciseCategory = 'cardio' | 'strength' | 'flexibility' | 'balance' | 'other';

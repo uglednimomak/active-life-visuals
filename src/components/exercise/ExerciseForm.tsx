@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useExercises } from '@/context/ExerciseContext';
 import { Button } from '@/components/ui/button';
@@ -11,6 +10,28 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+
+const commonExercises = [
+  'Push-ups',
+  'Squats',
+  'Burpees',
+  'Lunges',
+  'Running',
+  'Planks',
+  'Sit-ups',
+  'Pull-ups',
+  'Mountain Climbers',
+  'Jumping Jacks'
+];
 
 export const ExerciseForm = () => {
   const { addExercise } = useExercises();
@@ -18,6 +39,8 @@ export const ExerciseForm = () => {
   const [exerciseCount, setExerciseCount] = useState('');
   const [exerciseCategory, setExerciseCategory] = useState('');
   const [date, setDate] = useState<Date | undefined>(undefined);
+  const [personName, setPersonName] = useState('');
+  const [showCommandDialog, setShowCommandDialog] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,12 +56,21 @@ export const ExerciseForm = () => {
       count: parseInt(exerciseCount, 10),
       timestamp: timestamp,
       category: exerciseCategory || undefined,
+      personName: personName.trim() || undefined,
     });
 
     // Clear form
     setExerciseName('');
     setExerciseCount('');
     setDate(undefined);
+    setPersonName('');
+  };
+
+  const handleExerciseInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === '/' && !showCommandDialog) {
+      e.preventDefault();
+      setShowCommandDialog(true);
+    }
   };
 
   return (
@@ -49,16 +81,48 @@ export const ExerciseForm = () => {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="exercise-name">Exercise Name</Label>
+            <Label htmlFor="person-name">Person Name</Label>
+            <Input
+              id="person-name"
+              placeholder="Enter person's name"
+              value={personName}
+              onChange={(e) => setPersonName(e.target.value)}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="exercise-name">Exercise Name (type / for suggestions)</Label>
             <Input
               id="exercise-name"
-              placeholder="e.g., Push-ups, Running, Squats"
+              placeholder="e.g., Push-ups, Squats"
               value={exerciseName}
               onChange={(e) => setExerciseName(e.target.value)}
+              onKeyDown={handleExerciseInputKeyDown}
               required
             />
           </div>
           
+          <CommandDialog open={showCommandDialog} onOpenChange={setShowCommandDialog}>
+            <CommandInput placeholder="Search exercise..." />
+            <CommandList>
+              <CommandEmpty>No exercises found.</CommandEmpty>
+              <CommandGroup heading="Common Exercises">
+                {commonExercises.map((exercise) => (
+                  <CommandItem
+                    key={exercise}
+                    value={exercise}
+                    onSelect={(value) => {
+                      setExerciseName(value);
+                      setShowCommandDialog(false);
+                    }}
+                  >
+                    {exercise}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </CommandDialog>
+
           <div className="space-y-2">
             <Label htmlFor="exercise-count">Count / Reps</Label>
             <Input
