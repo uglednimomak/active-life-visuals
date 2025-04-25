@@ -39,24 +39,30 @@ const LeaderboardPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Rank</TableHead>
-                  <TableHead>Exercise</TableHead>
-                  <TableHead className="text-right">Total Count</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sortedExercises.map((exercise, index) => (
-                  <TableRow key={exercise.name}>
-                    <TableCell className="font-medium">#{index + 1}</TableCell>
-                    <TableCell>{exercise.name}</TableCell>
-                    <TableCell className="text-right">{exercise.count}</TableCell>
+            {sortedExercises.length === 0 ? (
+              <div className="text-center text-muted-foreground p-6">
+                No data to display
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Rank</TableHead>
+                    <TableHead>Exercise</TableHead>
+                    <TableHead className="text-right">Total Count</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {sortedExercises.map((exercise, index) => (
+                    <TableRow key={exercise.name}>
+                      <TableCell className="font-medium">#{index + 1}</TableCell>
+                      <TableCell>{exercise.name}</TableCell>
+                      <TableCell className="text-right">{exercise.count}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
       </div>
