@@ -64,7 +64,7 @@ export const ExerciseForm = () => {
     setPersonName('');
   };
 
-  const { isListening, error } = useSpeechRecognition(handleSpeechResult);
+  const { isListening, error, toggleListening } = useSpeechRecognition(handleSpeechResult);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,7 +104,10 @@ export const ExerciseForm = () => {
           <Button 
             variant="outline" 
             size="icon"
-            onClick={() => window.location.reload()}
+            onClick={(e) => {
+              e.preventDefault();
+              toggleListening();
+            }}
             className={cn(
               "transition-colors",
               isListening && "bg-red-100 hover:bg-red-200"
@@ -118,6 +121,11 @@ export const ExerciseForm = () => {
         {error && (
           <div className="mb-4 text-sm text-red-500">
             {error}
+          </div>
+        )}
+        {isListening && (
+          <div className="mb-4 text-sm text-green-600 font-medium animate-pulse">
+            Listening... Say something like "just did 10 pushups my name is John"
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">

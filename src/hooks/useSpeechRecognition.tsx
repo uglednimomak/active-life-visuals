@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface SpeechRecognitionResult {
   exercise: string;
@@ -10,6 +10,10 @@ interface SpeechRecognitionResult {
 export const useSpeechRecognition = (onResult: (result: SpeechRecognitionResult) => void) => {
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  const toggleListening = useCallback(() => {
+    setIsListening(prev => !prev);
+  }, []);
 
   useEffect(() => {
     if (!('webkitSpeechRecognition' in window)) {
@@ -37,32 +41,49 @@ export const useSpeechRecognition = (onResult: (result: SpeechRecognitionResult)
           count: parseInt(count, 10),
           personName: name ? name.trim() : ''
         });
+      } else {
+        setError("Voice command not recognized. Try saying 'just did 10 pushups my name is John'");
+        setTimeout(() => setError(null), 3000);
       }
     };
 
     recognition.onerror = (event: any) => {
       setError('Error occurred in recognition: ' + event.error);
+      setIsListening(false);
     };
 
     recognition.onend = () => {
       setIsListening(false);
     };
 
-    const startListening = () => {
-      setError(null);
-      setIsListening(true);
-      recognition.start();
-    };
+    // Start or stop recognition based on isListening state
+    if (isListening) {
+      try {
+        recognition.start();
+        console.log("Speech recognition started");
+      } catch (err) {
+        console.error("Error starting speech recognition:", err);
+        setError('Failed to start speech recognition');
+        setIsListening(false);
+      }
+    } else {
+      try {
+        recognition.stop();
+        console.log("Speech recognition stopped");
+      } catch (err) {
+        // Ignore errors when stopping (might not be active)
+      }
+    }
 
-    const stopListening = () => {
-      setIsListening(false);
-      recognition.stop();
-    };
-
+    // Cleanup function
     return () => {
-      stopListening();
+      try {
+        recognition.stop();
+      } catch (err) {
+        // Ignore errors when stopping (might not be active)
+      }
     };
-  }, [onResult]);
+  }, [isListening, onResult]);
 
-  return { isListening, error };
+  return { isListening, error, toggleListening };
 };
