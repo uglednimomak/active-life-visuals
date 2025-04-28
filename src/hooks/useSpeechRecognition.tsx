@@ -13,6 +13,7 @@ export const useSpeechRecognition = (onResult: (result: SpeechRecognitionResult)
   
   const toggleListening = useCallback(() => {
     setIsListening(prev => !prev);
+    setError(null); // Clear any previous errors when toggling
   }, []);
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export const useSpeechRecognition = (onResult: (result: SpeechRecognitionResult)
           count: parseInt(count, 10),
           personName: name ? name.trim() : ''
         });
+        setIsListening(false); // Stop listening after successful recognition
       } else {
         setError("Voice command not recognized. Try saying 'just did 10 pushups my name is John'");
         setTimeout(() => setError(null), 3000);

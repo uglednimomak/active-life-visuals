@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, CalendarIcon, Mic, MicOff } from 'lucide-react';
+import { Plus, CalendarIcon, Mic, StopCircle } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
@@ -101,20 +101,26 @@ export const ExerciseForm = () => {
       <CardHeader>
         <CardTitle className="text-xl font-bold flex justify-between items-center">
           Add Exercise
-          <Button 
-            variant="outline" 
-            size="icon"
-            onClick={(e) => {
-              e.preventDefault();
-              toggleListening();
-            }}
-            className={cn(
-              "transition-colors",
-              isListening && "bg-red-100 hover:bg-red-200"
-            )}
-          >
-            {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant={isListening ? "destructive" : "outline"}
+              size="icon"
+              onClick={(e) => {
+                e.preventDefault();
+                toggleListening();
+              }}
+              className={cn(
+                "transition-all duration-200",
+                isListening && "animate-pulse"
+              )}
+            >
+              {isListening ? (
+                <StopCircle className="h-4 w-4" />
+              ) : (
+                <Mic className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -124,7 +130,8 @@ export const ExerciseForm = () => {
           </div>
         )}
         {isListening && (
-          <div className="mb-4 text-sm text-green-600 font-medium animate-pulse">
+          <div className="mb-4 text-sm text-green-600 font-medium animate-pulse flex items-center gap-2">
+            <Mic className="h-4 w-4" /> 
             Listening... Say something like "just did 10 pushups my name is John"
           </div>
         )}
