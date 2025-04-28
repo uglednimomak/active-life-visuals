@@ -4,12 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, CalendarIcon } from 'lucide-react';
+import { Plus, CalendarIcon, Mic, MicOff } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import {
   Command,
   CommandDialog,
@@ -41,6 +42,7 @@ export const ExerciseForm = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [personName, setPersonName] = useState('');
   const [showCommandDialog, setShowCommandDialog] = useState(false);
+  const { isListening, error } = useSpeechRecognition(handleSpeechResult);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,12 +75,53 @@ export const ExerciseForm = () => {
     }
   };
 
+  const handleSpeechResult = ({ exercise, count, personName }: { exercise: string; count: number; personName: string }) => {
+    setExerciseName(exercise);
+    setExerciseCount(count.toString());
+    setPersonName(personName);
+    
+    // Auto-submit after voice input
+    const timestamp = date ? date.toISOString() : new Date().toISOString();
+    
+    addExercise({
+      name: exercise,
+      count: count,
+      timestamp: timestamp,
+      category: exerciseCategory || undefined,
+      personName: personName.trim() || undefined,
+    });
+
+    // Reset form
+    setExerciseName('');
+    setExerciseCount('');
+    setDate(undefined);
+    setPersonName('');
+  };
+
   return (
     <Card className="animate-fade-in">
       <CardHeader>
-        <CardTitle className="text-xl font-bold">Add Exercise</CardTitle>
+        <CardTitle className="text-xl font-bold flex justify-between items-center">
+          Add Exercise
+          <Button 
+            variant="outline" 
+            size="icon"
+            onClick={() => window.location.reload()}
+            className={cn(
+              "transition-colors",
+              isListening && "bg-red-100 hover:bg-red-200"
+            )}
+          >
+            {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+          </Button>
+        </CardTitle>
       </CardHeader>
       <CardContent>
+        {error && (
+          <div className="mb-4 text-sm text-red-500">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="person-name">Person Name</Label>
