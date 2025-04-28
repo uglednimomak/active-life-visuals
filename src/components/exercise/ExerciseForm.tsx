@@ -42,6 +42,28 @@ export const ExerciseForm = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [personName, setPersonName] = useState('');
   const [showCommandDialog, setShowCommandDialog] = useState(false);
+  
+  const handleSpeechResult = ({ exercise, count, personName }: { exercise: string; count: number; personName: string }) => {
+    setExerciseName(exercise);
+    setExerciseCount(count.toString());
+    setPersonName(personName);
+    
+    const timestamp = date ? date.toISOString() : new Date().toISOString();
+    
+    addExercise({
+      name: exercise,
+      count: count,
+      timestamp: timestamp,
+      category: exerciseCategory || undefined,
+      personName: personName.trim() || undefined,
+    });
+
+    setExerciseName('');
+    setExerciseCount('');
+    setDate(undefined);
+    setPersonName('');
+  };
+
   const { isListening, error } = useSpeechRecognition(handleSpeechResult);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -61,7 +83,6 @@ export const ExerciseForm = () => {
       personName: personName.trim() || undefined,
     });
 
-    // Clear form
     setExerciseName('');
     setExerciseCount('');
     setDate(undefined);
@@ -73,29 +94,6 @@ export const ExerciseForm = () => {
       e.preventDefault();
       setShowCommandDialog(true);
     }
-  };
-
-  const handleSpeechResult = ({ exercise, count, personName }: { exercise: string; count: number; personName: string }) => {
-    setExerciseName(exercise);
-    setExerciseCount(count.toString());
-    setPersonName(personName);
-    
-    // Auto-submit after voice input
-    const timestamp = date ? date.toISOString() : new Date().toISOString();
-    
-    addExercise({
-      name: exercise,
-      count: count,
-      timestamp: timestamp,
-      category: exerciseCategory || undefined,
-      personName: personName.trim() || undefined,
-    });
-
-    // Reset form
-    setExerciseName('');
-    setExerciseCount('');
-    setDate(undefined);
-    setPersonName('');
   };
 
   return (
