@@ -7,10 +7,10 @@ export const Navbar = () => {
   return (
     <header className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
       <div className="container flex items-center justify-between h-16 px-4 mx-auto">
-        <div className="flex items-center space-x-2">
+        <Link to="/" className="flex items-center space-x-2">
           <Activity className="w-6 h-6 text-fitness-primary" />
           <span className="text-xl font-bold">FitTrack</span>
-        </div>
+        </Link>
         <nav className="hidden md:flex">
           <ul className="flex items-center space-x-8">
             <li>
