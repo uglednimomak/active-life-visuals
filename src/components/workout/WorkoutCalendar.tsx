@@ -62,7 +62,6 @@ export const WorkoutCalendar = ({ selectedDate, onDateSelect }: WorkoutCalendarP
         mode="single"
         selected={selectedDate}
         onSelect={onDateSelect}
-        className="calendar" // Remove pointer-events-auto class to fix the issue
         fromDate={startOfYear(new Date())} // Allow selecting from the start of year
         toDate={addDays(new Date(), 365)} // Show one year ahead
         components={{
