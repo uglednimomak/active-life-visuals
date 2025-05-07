@@ -8,6 +8,7 @@ interface WorkoutContextType {
   workoutProgress: WorkoutProgressEntry[];
   toggleExerciseCompletion: (date: Date, exerciseName: string) => void;
   getCompletedExercises: (date: Date) => string[];
+  isExerciseCompleted: (date: Date, exerciseName: string) => boolean;
 }
 
 const WorkoutContext = createContext<WorkoutContextType | undefined>(undefined);
@@ -34,6 +35,11 @@ export const WorkoutProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const dateStr = format(date, 'yyyy-MM-dd');
     const entry = workoutProgress.find(entry => entry.date === dateStr);
     return entry ? entry.completedExercises : [];
+  };
+
+  const isExerciseCompleted = (date: Date, exerciseName: string): boolean => {
+    const completedExercises = getCompletedExercises(date);
+    return completedExercises.includes(exerciseName);
   };
 
   const toggleExerciseCompletion = (date: Date, exerciseName: string) => {
@@ -88,7 +94,8 @@ export const WorkoutProvider: React.FC<{ children: React.ReactNode }> = ({ child
     <WorkoutContext.Provider value={{ 
       workoutProgress, 
       toggleExerciseCompletion, 
-      getCompletedExercises 
+      getCompletedExercises,
+      isExerciseCompleted
     }}>
       {children}
     </WorkoutContext.Provider>

@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { format } from 'date-fns';
-import { CheckCircle, Circle, X } from 'lucide-react';
+import { CheckCircle, Circle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { workoutSchedule } from '@/data/workoutPlan';
 import { useWorkout } from '@/context/WorkoutContext';
@@ -13,7 +12,7 @@ interface WorkoutDayDetailsProps {
 }
 
 export const WorkoutDayDetails = ({ date }: WorkoutDayDetailsProps) => {
-  const { toggleExerciseCompletion, getCompletedExercises } = useWorkout();
+  const { toggleExerciseCompletion, isExerciseCompleted } = useWorkout();
   
   if (!date) return null;
   
@@ -26,7 +25,6 @@ export const WorkoutDayDetails = ({ date }: WorkoutDayDetailsProps) => {
 
   const dayType = getWorkoutDayType(date);
   const workoutDay = workoutSchedule[dayType];
-  const completedExercises = getCompletedExercises(date);
   
   const handleToggleComplete = (exerciseName: string) => {
     if (date) {
@@ -64,7 +62,7 @@ export const WorkoutDayDetails = ({ date }: WorkoutDayDetailsProps) => {
                   </thead>
                   <tbody>
                     {workoutDay.exercises.map((exercise, index) => {
-                      const isCompleted = completedExercises.includes(exercise.name);
+                      const isCompleted = isExerciseCompleted(date, exercise.name);
                       return (
                         <tr key={index} className="border-b border-gray-100">
                           <td className="px-2 py-3">{exercise.name}</td>
@@ -93,7 +91,7 @@ export const WorkoutDayDetails = ({ date }: WorkoutDayDetailsProps) => {
               <h3 className="mb-4 text-lg font-semibold">Additional Activities</h3>
               <div className="space-y-2">
                 {workoutDay.activities.map((activity, index) => {
-                  const isCompleted = completedExercises.includes(activity.name);
+                  const isCompleted = isExerciseCompleted(date, activity.name);
                   return (
                     <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100">
                       <div className="flex items-center space-x-2">
