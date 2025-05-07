@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Activity, BarChart, History, Home, Trophy } from 'lucide-react';
+import { Activity, BarChart, History, Home, Trophy, Calendar } from 'lucide-react';
 
 export const Navbar = () => {
   const location = useLocation();
@@ -70,6 +70,19 @@ export const Navbar = () => {
               >
                 <Trophy className="w-4 h-4 mr-2" />
                 Leaderboard
+              </Link>
+            </li>
+            <li>
+              <Link 
+                to="/workout-calendar" 
+                className={`flex items-center px-3 py-2 text-sm font-medium transition-colors rounded-md ${
+                  isActive('/workout-calendar') 
+                    ? 'text-fitness-primary bg-blue-50' 
+                    : 'hover:text-fitness-primary'
+                }`}
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                Workout Plan
               </Link>
             </li>
           </ul>
