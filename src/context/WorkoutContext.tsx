@@ -9,6 +9,7 @@ interface WorkoutContextType {
   toggleExerciseCompletion: (date: Date, exerciseName: string) => void;
   getCompletedExercises: (date: Date) => string[];
   isExerciseCompleted: (date: Date, exerciseName: string) => boolean;
+  addExerciseToWorkout: (exerciseName: string, date?: Date) => void;
 }
 
 const WorkoutContext = createContext<WorkoutContextType | undefined>(undefined);
@@ -40,6 +41,14 @@ export const WorkoutProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const isExerciseCompleted = (date: Date, exerciseName: string): boolean => {
     const completedExercises = getCompletedExercises(date);
     return completedExercises.includes(exerciseName);
+  };
+
+  // New function to add an exercise to the workout calendar
+  const addExerciseToWorkout = (exerciseName: string, date: Date = new Date()) => {
+    // If the exercise isn't already completed, mark it as completed
+    if (!isExerciseCompleted(date, exerciseName)) {
+      toggleExerciseCompletion(date, exerciseName);
+    }
   };
 
   const toggleExerciseCompletion = (date: Date, exerciseName: string) => {
@@ -95,7 +104,8 @@ export const WorkoutProvider: React.FC<{ children: React.ReactNode }> = ({ child
       workoutProgress, 
       toggleExerciseCompletion, 
       getCompletedExercises,
-      isExerciseCompleted
+      isExerciseCompleted,
+      addExerciseToWorkout
     }}>
       {children}
     </WorkoutContext.Provider>
