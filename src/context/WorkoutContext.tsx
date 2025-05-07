@@ -43,12 +43,29 @@ export const WorkoutProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return completedExercises.includes(exerciseName);
   };
 
-  // New function to add an exercise to the workout calendar
+  // Enhanced function to add an exercise to the workout calendar
   const addExerciseToWorkout = (exerciseName: string, date: Date = new Date()) => {
-    // If the exercise isn't already completed, mark it as completed
-    if (!isExerciseCompleted(date, exerciseName)) {
-      toggleExerciseCompletion(date, exerciseName);
+    // Normalize exercise name to match workout plan naming convention
+    let normalizedName = exerciseName;
+    
+    // Check for common exercise names that might need normalization
+    if (normalizedName.toLowerCase().includes('cycling') || 
+        normalizedName.toLowerCase().includes('cycle')) {
+      // Map to one of the activities in the workout plan
+      if (normalizedName.toLowerCase().includes('light')) {
+        normalizedName = 'Light Cycling (optional)';
+      } else {
+        normalizedName = 'Cycling';
+      }
     }
+    
+    // If the exercise isn't already completed, mark it as completed
+    if (!isExerciseCompleted(date, normalizedName)) {
+      toggleExerciseCompletion(date, normalizedName);
+    }
+    
+    // Also log this for debugging
+    console.log(`Adding exercise to workout: ${normalizedName} on ${format(date, 'yyyy-MM-dd')}`);
   };
 
   const toggleExerciseCompletion = (date: Date, exerciseName: string) => {
