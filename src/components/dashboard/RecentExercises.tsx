@@ -38,6 +38,7 @@ export const RecentExercises = () => {
                 <TableHead>Exercise</TableHead>
                 <TableHead className="text-right">Count</TableHead>
                 <TableHead className="hidden md:table-cell">Category</TableHead>
+                <TableHead className="hidden sm:table-cell">Person</TableHead>
                 <TableHead>When</TableHead>
               </TableRow>
             </TableHeader>
@@ -47,6 +48,7 @@ export const RecentExercises = () => {
                   <TableCell className="font-medium">{exercise.name}</TableCell>
                   <TableCell className="text-right">{exercise.count}</TableCell>
                   <TableCell className="hidden capitalize md:table-cell">{exercise.category || '-'}</TableCell>
+                  <TableCell className="hidden sm:table-cell">{exercise.personName || '-'}</TableCell>
                   <TableCell>
                     {formatDistanceToNow(new Date(exercise.timestamp), { addSuffix: true })}
                   </TableCell>
