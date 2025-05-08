@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Activity, BarChart, History, Home, Trophy, Calendar, Menu } from 'lucide-react';
+import { BarChart, History, Home, Trophy, Calendar, Menu, HeartPulse } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 export const Navbar = () => {
@@ -25,8 +25,13 @@ export const Navbar = () => {
     <header className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
       <div className="container flex items-center justify-between h-16 px-4 mx-auto">
         <Link to="/" className="flex items-center space-x-2">
-          <Activity className="w-6 h-6 text-fitness-primary" />
-          <span className="text-xl font-bold">FitTrack</span>
+          <div className="flex items-center">
+            <img 
+              src="/lovable-uploads/6fde9416-285b-4e7f-9a71-d9448c14ba6f.png" 
+              alt="FitTrack Logo" 
+              className="h-8"
+            />
+          </div>
         </Link>
         
         <nav className="hidden md:flex">
@@ -60,8 +65,11 @@ export const Navbar = () => {
               <div className="flex flex-col h-full">
                 <div className="p-4 border-b">
                   <div className="flex items-center space-x-2">
-                    <Activity className="w-6 h-6 text-fitness-primary" />
-                    <span className="text-xl font-bold">FitTrack</span>
+                    <img 
+                      src="/lovable-uploads/6fde9416-285b-4e7f-9a71-d9448c14ba6f.png" 
+                      alt="FitTrack Logo" 
+                      className="h-8"
+                    />
                   </div>
                 </div>
                 <nav className="flex-1">
