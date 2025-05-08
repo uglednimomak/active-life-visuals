@@ -29,7 +29,7 @@ export const Navbar = () => {
             <img 
               src="/lovable-uploads/6fde9416-285b-4e7f-9a71-d9448c14ba6f.png" 
               alt="FitTrack Logo" 
-              className="h-8"
+              className="h-12"
             />
           </div>
         </Link>
