@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useExercises } from '@/context/ExerciseContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,6 +12,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
+import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Command,
   CommandDialog,
@@ -31,7 +33,10 @@ const commonExercises = [
   'Sit-ups',
   'Pull-ups',
   'Mountain Climbers',
-  'Jumping Jacks'
+  'Jumping Jacks',
+  'Light Cycling',
+  'Walking',
+  'Weightlifting',
 ];
 
 export const ExerciseForm = () => {
@@ -42,6 +47,23 @@ export const ExerciseForm = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [personName, setPersonName] = useState('');
   const [showCommandDialog, setShowCommandDialog] = useState(false);
+  const isMobile = useIsMobile();
+  
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === '/' && !showCommandDialog) {
+        e.preventDefault();
+        setShowCommandDialog(true);
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showCommandDialog]);
   
   const handleSpeechResult = ({ exercise, count, personName }: { exercise: string; count: number; personName: string }) => {
     setExerciseName(exercise);
@@ -96,6 +118,10 @@ export const ExerciseForm = () => {
     }
   };
 
+  const handleExerciseSuggestionClick = () => {
+    setShowCommandDialog(true);
+  };
+
   return (
     <Card className="animate-fade-in">
       <CardHeader>
@@ -147,13 +173,25 @@ export const ExerciseForm = () => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="exercise-name">Exercise Name (type / for suggestions)</Label>
+            <Label htmlFor="exercise-name" className="flex justify-between">
+              <span>Exercise Name (type / for suggestions)</span>
+              <Button
+                type="button"
+                variant="ghost" 
+                size="sm"
+                className="h-6 p-1 text-xs text-gray-500 hover:text-gray-900"
+                onClick={handleExerciseSuggestionClick}
+              >
+                Browse suggestions
+              </Button>
+            </Label>
             <Input
               id="exercise-name"
               placeholder="e.g., Push-ups, Squats"
               value={exerciseName}
               onChange={(e) => setExerciseName(e.target.value)}
               onKeyDown={handleExerciseInputKeyDown}
+              onClick={isMobile ? () => {} : undefined}
               required
             />
           </div>
@@ -214,7 +252,6 @@ export const ExerciseForm = () => {
                   selected={date}
                   onSelect={setDate}
                   initialFocus
-                  className={cn("p-3 pointer-events-auto")}
                 />
               </PopoverContent>
             </Popover>
