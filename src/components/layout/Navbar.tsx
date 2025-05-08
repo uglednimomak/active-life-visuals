@@ -22,7 +22,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-10 bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6] border-b border-purple-300 shadow-sm">
+    <header className="sticky top-0 z-10 bg-[#FFFCF9] border-b border-gray-200 shadow-sm">
       <div className="container flex items-center justify-between h-16 px-4 mx-auto">
         <Link to="/" className="flex items-center space-x-2">
           <div className="flex items-center">
@@ -42,8 +42,8 @@ export const Navbar = () => {
                   to={link.path} 
                   className={`flex items-center px-3 py-2 text-sm font-medium transition-colors rounded-md ${
                     isActive(link.path) 
-                      ? 'text-white bg-white/20' 
-                      : 'text-white/80 hover:text-white hover:bg-white/10'
+                      ? 'text-fitness-primary bg-gray-100' 
+                      : 'text-gray-600 hover:text-fitness-primary hover:bg-gray-50'
                   }`}
                 >
                   {link.icon}
@@ -57,13 +57,13 @@ export const Navbar = () => {
         <div className="flex md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <button className="p-2 text-white rounded-md hover:bg-white/10" aria-label="Open menu">
+              <button className="p-2 rounded-md hover:bg-gray-100" aria-label="Open menu">
                 <Menu className="w-5 h-5" />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[250px] p-0 bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6]">
+            <SheetContent side="right" className="w-[250px] p-0 bg-[#FFFCF9]">
               <div className="flex flex-col h-full">
-                <div className="p-4 border-b border-purple-300/30">
+                <div className="p-4 border-b border-gray-200">
                   <div className="flex items-center space-x-2">
                     <img 
                       src="/lovable-uploads/6fde9416-285b-4e7f-9a71-d9448c14ba6f.png" 
@@ -80,8 +80,8 @@ export const Navbar = () => {
                           to={link.path} 
                           className={`flex items-center w-full px-3 py-2 text-sm font-medium transition-colors rounded-md ${
                             isActive(link.path) 
-                              ? 'text-white bg-white/20' 
-                              : 'text-white/80 hover:text-white hover:bg-white/10'
+                              ? 'text-fitness-primary bg-gray-100' 
+                              : 'text-gray-600 hover:text-fitness-primary hover:bg-gray-50'
                           }`}
                           onClick={() => setIsOpen(false)}
                         >
